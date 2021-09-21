@@ -1,16 +1,16 @@
 const express = require('express');
+const {sendOTP} = require('./controller/userController')
+const mongoose = require('mongoose')
 
 const app = express();
-const port = 8080;
+const port = 3010;
 app.use(express.json());
 
 app.head('/api/user', async (req, res, next) => {
   try {
-    const mobileNum = req.query.mobileNum
-    if (!(mobileNum.length === 10 && !isNaN(Number(mobileNum)))) throw new Error()
-    
-
-
+    const email = req.query.email
+    await sendOTP(email);
+    res.status(204).send()
   } catch (err) {
     next(err);
   }

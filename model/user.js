@@ -6,7 +6,7 @@ const User = new Schema ({
   password: String,
   otp: String,
   isRegistered: Boolean,
-  createTime: Long,
+  createTime: Number,
 });
 
 const UserModel = mongoose.model('User', User);
