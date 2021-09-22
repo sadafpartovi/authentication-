@@ -1,4 +1,5 @@
 const UserModel = require('../model/user');
+const jwt = require('jsonwebtoken')
 
 const sendOTP = async (email) => {
   let random = Math.floor(Math.random() * (99999 + 1)).toString();
@@ -19,6 +20,22 @@ const sendOTP = async (email) => {
   }
 }
 
+const verifyOTP = async (otp, email) => {
+  const user = await UserModel.findOne({email})
+  if (user.otp !== otp) throw new Error('Wrong OTP')
+  if (new Date().getTime() - user.createTime >  2 * 60 * 1000) throw new Error('OTP Expired')
+
+  return createToken(user._id);
+}
+
+const createToken = (userId) => {
+  const data = {
+    userId,
+    role: 'user',
+  }
+  return jwt.sign(data, 'sadaf')
+}
 
 
-module.exports = {sendOTP};
+
+module.exports = {sendOTP, verifyOTP};

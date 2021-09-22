@@ -16,6 +16,16 @@ app.head('/api/user', async (req, res, next) => {
   }
 })
 
+app.post('/api/verifyOTP', async (req, res, next) => {
+  try {
+    const otp = req.body.otp;
+    const email = req.body.email;
+
+  } catch (err) {
+    next(err);
+  }
+})
+
 app.use(function (err, req, res, next) {
   console.error(err.stack);
   res.status(500).send(err);
