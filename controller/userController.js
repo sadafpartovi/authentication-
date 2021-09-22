@@ -22,10 +22,12 @@ const sendOTP = async (email) => {
 
 const verifyOTP = async (otp, email) => {
   const user = await UserModel.findOne({email})
+  if (!user) throw new Error('Register Please!')
   if (user.otp !== otp) throw new Error('Wrong OTP')
   if (new Date().getTime() - user.createTime >  2 * 60 * 1000) throw new Error('OTP Expired')
 
-  return createToken(user._id);
+  const token = createToken(user._id)
+  return {token, user.isRegistered};
 }
 
 const createToken = (userId) => {
@@ -34,6 +36,10 @@ const createToken = (userId) => {
     role: 'user',
   }
   return jwt.sign(data, 'sadaf')
+}
+
+const register = (name, password, userId) => {
+  const user = await UserModel.findById(userId);
 }
 
 
