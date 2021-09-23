@@ -42,7 +42,7 @@ const register = (name, password, userId) => {
   const user = await UserModel.findById(userId);
   user.name = name;
   user.password = password;
-  createToken(userId)
+  return createToken(userId)
 }
 
 

@@ -1,5 +1,5 @@
 const express = require("express");
-const { sendOTP, verifyOTP } = require("./controller/userController");
+const { sendOTP, verifyOTP, register } = require("./controller/userController");
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 
@@ -44,6 +44,8 @@ app.post("/api/verifyOTP", async (req, res, next) => {
 app.post("/api/registre", auth, async (req, res, next) => {
   try {
     const { name, password, userId } = req.body;
+    const token = register(name, password, userId);
+    res.status(200).send(token)
   } catch (err) {
     next(err);
   }
