@@ -40,8 +40,11 @@ const createToken = (userId) => {
 
 const register = (name, password, userId) => {
   const user = await UserModel.findById(userId);
+  user.name = name;
+  user.password = password;
+  createToken(userId)
 }
 
 
 
-module.exports = {sendOTP, verifyOTP};
+module.exports = {sendOTP, verifyOTP, register};
