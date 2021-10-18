@@ -1,5 +1,5 @@
 const express = require("express");
-const { sendOTP, verifyOTP, register } = require("./controller/userController");
+const { sendOTP, verifyOTP, register, login } = require("./controller/userController");
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 
@@ -41,15 +41,25 @@ app.post("/api/verifyOTP", async (req, res, next) => {
   }
 });
 
-app.post("/api/registre", auth, async (req, res, next) => {
+app.post("/api/register", auth, async (req, res, next) => {
   try {
     const { name, password, userId } = req.body;
-    const token = register(name, password, userId);
-    res.status(200).send(token)
+    await register(name, password, userId);
+    res.status(200).send()
   } catch (err) {
     next(err);
   }
 });
+
+app.post('/api/login', async (req, res, next) => {
+  try {
+    const {email, password} = req.body;
+    const token = await login(email, password)
+    res.status(200).send({token})
+  } catch (err) {
+    next(err);
+  }
+})
 
 app.use(function (err, req, res, next) {
   console.error(err.stack);
